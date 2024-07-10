@@ -93,6 +93,8 @@ json = {
     "Arrivals_h":Arrivals_h
 }
 
+st.write(json)
+
 
 if st.button("Search options"):
     f.searcher(json)
