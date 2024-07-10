@@ -2,6 +2,7 @@ import altair as alt
 import numpy as np
 import pandas as pd
 import streamlit as st
+import functions as f
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error, r2_score
@@ -55,7 +56,7 @@ with col4:
 
 
 # Título de la aplicación
-st.header("Step 2: Choose the dates")
+st.header("Step 2: Choose dates and times")
 
 # Create three columns
 col1, col2, col3, col4 = st.columns(4)
@@ -76,10 +77,25 @@ with col4:
     hourto01 = st.slider("Arrival Hour 1", 0, 23, 12)
     hourto02 = st.slider("Arrival Hour 2", 0, 23, 12)
 
+Origins = [iata01,iata02]
+Travelers = [passengers01,passengers01]
+Departures_d = [datefrom01,datefrom02]
+Arrivals_d = [dateto01,dateto02]
+Departures_h = [hourfrom01,hourfrom02]
+Arrivals_h = [hourto01,hourto01]
+
+json = {
+    "Origin": Origins,
+    "Travelers":Travelers,
+    "Departure_d": Departures_d,
+    "Departures_h":Departures_h,
+    "Arrivals_d": Arrivals_d,
+    "Arrivals_h":Arrivals_h
+}
 
 
-
-
+if st.button("Search options"):
+    f.searcher(json)
 
 
 
