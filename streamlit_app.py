@@ -10,9 +10,8 @@ import time
 import zipfile
 
 # Page title
-st.set_page_config(page_title='Blowfish', page_icon='🐡')
-st.title('🐡 Welcome to Blowfish!')
-
+st.set_page_config(page_title='CoolSpot', page_icon='🛫')
+st.title('🛫 Welcome to CoolSpot Searcher!')
 
 
 tabla = pd.read_csv("data/tabla_st_01.csv", encoding='utf-8')
@@ -65,7 +64,31 @@ if st.button("Buscar vuelos"):
         st.write(search)
 
 
+# JavaScript code to scroll down the page
+scroll_script = """
+<script>
+function scrollDown() {
+    window.scrollBy(0, 500); // Change 500 to your desired scroll distance
+}
+</script>
+"""
 
+# Embed the JavaScript code within an HTML component
+st.markdown(scroll_script, unsafe_allow_html=True)
+
+# Create a button in Streamlit
+if st.button("Scroll Down"):
+    # Execute the JavaScript function
+    st.markdown("<script>scrollDown()</script>", unsafe_allow_html=True)
+
+# Add some content to demonstrate scrolling
+st.write("Some content...")
+st.write("Some more content...")
+st.write("Even more content...")
+
+# Add enough content to make scrolling necessary
+for i in range(50):
+    st.write(f"Line {i+1}")
 
 
 
