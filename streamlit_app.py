@@ -23,7 +23,7 @@ country_df = tabla.Country.unique()
 st.header("Step 1: Choose your starting points")
 
 # Create three columns
-col1, col2, col3 = st.columns(3)
+col1, col2, col3, col4 = st.columns(4)
 
 # Add content to the first column
 with col1:
@@ -48,9 +48,35 @@ with col3:
     iata02_df = tabla[tabla["City"]==city02]["Code"]
     iata02 = st.selectbox("Airport 2", iata02_df)
 
+# Add content to the forth column
+with col3:
+    passengers01 = st.selectbox("# of travelers from 1", options=[1,2,3,4,5,6])
+    passengers02 = st.selectbox("# of travelers from 2", options=[1, 2, 3, 4, 5, 6])
+
 
 # Título de la aplicación
 st.header("Step 2: Choose the dates")
+
+# Create three columns
+col1, col2, col3, col4 = st.columns(4)
+
+with col1:
+    datefrom01 = st.date_input("Departure day 1")
+    datefrom02 = st.date_input("Departure day 2")
+
+with col2:
+    hourfrom01 = st.slider("Departure Hour 1", 0, 23, 12)
+    hourfrom02 = st.slider("Departur Hour 2", 0, 23, 12)
+
+with col3:
+    dateto01 = st.date_input("Arrival day 1")
+    dateto02 = st.date_input("Arrvival day 2")
+
+with col4:
+    hourto01 = st.slider("Arrival Hour 1", 0, 23, 12)
+    hourto02 = st.slider("Arrival Hour 2", 0, 23, 12)
+
+
 
 
 
