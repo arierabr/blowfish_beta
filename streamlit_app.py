@@ -13,43 +13,56 @@ import zipfile
 st.set_page_config(page_title='Blowfish', page_icon='🐡')
 st.title('🐡 Welcome to Blowfish!')
 
-st.header('Step 1: Choose your starting points')
-
-#all_iata_df = pd.read_excel("data/airport_codes.xlsx")
-
-aeropuertos_df = pd.read_csv("data/aeropuertos_v02.csv", encoding='utf-8')
 
 
-if 'counter' not in st.session_state:
-    st.session_state.counter = 0
+tabla = pd.read_csv("data/tabla_st_01.csv", encoding='utf-8')
 
-# Añadir tres campos de entrada
-col1, col2, col3, col4, col5 = st.columns(5)
 
-with col1:
-    data1 = st.selectbox("Country", aeropuertos_df.Country.unique())
-    data21 = st.selectbox("Country ", aeropuertos_df.Country.unique())
-with col2:
-    data2 = st.selectbox("City", aeropuertos_df[aeropuertos_df.Country == data1].City.unique())
-    data22 = st.selectbox("City ", aeropuertos_df[aeropuertos_df.Country == data21].City.unique())
-with col3:
-    data3 = st.number_input("# of passengers", step=1, min_value=0, format="%d")
-    data23 = st.number_input("# of passengers ", step=1, min_value=0, format="%d")
-with col4:
-    data4 = st.date_input("Departure date")
-    data24 = st.date_input("Departure date ")
-    if st.button("Add starting point"):
-        st.session_state.counter += 1
-with col5:
-    data5 = st.date_input("Arrival date")
-    data25 = st.date_input("Arrival date ")
-    if st.button("Drop starting point"):
-        st.session_state.counter -= 1
+# Inicializar sesión de estado
+if "search_lines" not in st.session_state:
+    st.session_state.search_lines = []
+
+# Función para añadir una línea de búsqueda
+def add_search_line():
+    st.session_state.search_lines.append({
+        "origin": "",
+        "departure date": None,
+        "arrival date": None,
+        "class": ""
+    })
+
+# Función para eliminar una línea de búsqueda
+def remove_search_line(index):
+    st.session_state.search_lines.pop(index)
+
+# Título de la aplicación
+st.header("Step 1: Choose your starting points")
+
+# Botones para añadir y eliminar líneas de búsqueda
+
+if st.button("Add origin"):
+    add_search_line()
 
 
 
+# Mostrar las líneas de búsqueda
+for index, search_line in enumerate(st.session_state.search_lines):
+    cols = st.columns((1, 0.7, 0.7, 0.8, 1))
+    search_line["origin"] = cols[0].selectbox(f"Origen {index+1}", tabla.Airport)
+    search_line["departure date"] = cols[1].date_input(f"Fecha ida {index+1}", value=search_line["departure date"])
+    search_line["arrival date"] = cols[2].date_input(f"Fecha regreso {index+1}", value=search_line["arrival date"])
+    search_line["class"] = cols[3].selectbox(f"Clase {index+1}", ["Economy", "Business", "First"], index=0)
+    if cols[4].button(" - ", key=f"remove_{index}"):
+        remove_search_line(index)
+        st.experimental_rerun()  # Recargar la página después de eliminar
 
-st.write(f"Contador: {st.session_state.counter}")
+
+# Botón para enviar el formulario
+if st.button("Buscar vuelos"):
+    # Aquí puedes procesar las búsquedas
+    st.write("Búsquedas realizadas:")
+    for search in st.session_state.search_lines:
+        st.write(search)
 
 
 
