@@ -28,6 +28,7 @@ col1, col2, col3 = st.columns(3)
 # Add content to the first column
 with col1:
     country01 = st.selectbox("Country 1", country_df)
+    country02 = st.selectbox("Country 2", country_df)
 
 
 # Add content to the second column
@@ -35,11 +36,17 @@ with col2:
     city01_df = tabla[tabla["Country"] == country01]["City"].unique()
     city01 = st.selectbox("City 1", city01_df)
 
+    city02_df = tabla[tabla["Country"] == country02]["City"].unique()
+    city02 = st.selectbox("City 2", city02_df)
+
 
 # Add content to the third column
 with col3:
     iata01_df = tabla[tabla["City"]==city01]["Code"]
     iata01 = st.selectbox("Airport 1", iata01_df)
+
+    iata02_df = tabla[tabla["City"]==city02]["Code"]
+    iata02 = st.selectbox("Airport 2", iata02_df)
 
 
 
