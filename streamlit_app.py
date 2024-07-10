@@ -68,7 +68,7 @@ if st.button("Buscar vuelos"):
 scroll_script = """
 <script>
 function scrollDown() {
-    window.scrollBy(0, 500); // Change 500 to your desired scroll distance
+    window.scrollBy(0, 1000); // Change 500 to your desired scroll distance
 }
 </script>
 """
