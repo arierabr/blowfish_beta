@@ -50,8 +50,8 @@ with col3:
 
 # Add content to the forth column
 with col3:
-    passengers01 = st.selectbox("# of travelers from 1", options=[1,2,3,4,5,6])
-    passengers02 = st.selectbox("# of travelers from 2", options=[1, 2, 3, 4, 5, 6])
+    passengers01 = st.selectbox("Travelers 1", options=[1,2,3,4,5,6])
+    passengers02 = st.selectbox("Travelers 2", options=[1, 2, 3, 4, 5, 6])
 
 
 # Título de la aplicación
