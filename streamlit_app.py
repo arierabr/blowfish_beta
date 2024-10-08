@@ -95,10 +95,6 @@ json = {
 
 st.write(json)
 
-
-if st.button("Search options"):
-    f.searcher(json)
-
 import streamlit as st
 
 # Definir la plantilla de las preguntas para los orígenes
@@ -121,7 +117,7 @@ if 'origen_actual' not in st.session_state:
 
 # Inicializar el número de orígenes si no existe
 if 'total_origenes' not in st.session_state:
-    st.session_state.total_origenes = 0
+    st.session_state.total_origenes = None  # Cambiado a None para control de flujo
 
 # Inicializar un diccionario para almacenar las respuestas si no existe
 if 'respuestas' not in st.session_state:
@@ -157,41 +153,48 @@ def avanzar_pregunta():
     else:
         st.session_state.indice_pregunta += 1  # Pasar a la siguiente pregunta
 
+    # Limpiar el campo de entrada
+    st.session_state.respuesta_input = ""
+
 
 # Mostrar la pregunta actual y ajustar el tipo de input
 indice = st.session_state.indice_pregunta
 origen_actual = st.session_state.origen_actual
 
-# Preguntar el número total de orígenes si aún no se ha hecho
-if st.session_state.total_origenes == 0:
-    st.session_state.total_origenes = st.number_input("¿Cuántos orígenes diferentes tenemos?", min_value=1, step=1)
+# Controlar la selección de número de orígenes, con botón para avanzar
+if st.session_state.total_origenes is None:
+    st.session_state.total_origenes = st.number_input("¿Cuántos orígenes diferentes tenemos?", min_value=1, step=1,
+                                                      value=1)
 
-# Si todavía hay orígenes que no han sido cubiertos, continuar con las preguntas
-if origen_actual <= st.session_state.total_origenes:
-    ordinal = numero_a_ordinal(origen_actual)
-    st.write(preguntas_template[indice - 1].format(ordinal=ordinal))
-
-    # Condicionales para definir diferentes tipos de input
-    if indice == 2:  # Pregunta de número de personas
-        st.number_input("Tu respuesta aquí:", key="respuesta_input", step=1)
-
-    elif indice == 3:  # Fecha de salida
-        st.date_input("Selecciona la fecha de salida:", key="respuesta_input")
-
-    elif indice == 4 or indice == 6:  # Hora (momento de salida o llegada)
-        st.time_input("Selecciona la hora:", key="respuesta_input")
-
-    elif indice == 5:  # Fecha de llegada
-        st.date_input("Selecciona la fecha de llegada:", key="respuesta_input")
-
-    else:  # Cualquier otro input
-        st.text_input("Tu respuesta aquí:", key="respuesta_input")
-
-    # Botón para pasar a la siguiente pregunta
-    st.button("Siguiente", on_click=avanzar_pregunta)
-
+    if st.button("Confirmar número de orígenes"):
+        st.session_state.indice_pregunta = 1  # Iniciar la secuencia de preguntas
 else:
-    st.write("¡Gracias por responder todas las preguntas!")
+    # Si todavía hay orígenes que no han sido cubiertos, continuar con las preguntas
+    if origen_actual <= st.session_state.total_origenes:
+        ordinal = numero_a_ordinal(origen_actual)
+        st.write(preguntas_template[indice - 1].format(ordinal=ordinal))
+
+        # Condicionales para definir diferentes tipos de input
+        if indice == 2:  # Pregunta de número de personas
+            st.number_input("Tu respuesta aquí:", key="respuesta_input", step=1)
+
+        elif indice == 3:  # Fecha de salida
+            st.date_input("Selecciona la fecha de salida:", key="respuesta_input")
+
+        elif indice == 4 or indice == 6:  # Hora (momento de salida o llegada)
+            st.time_input("Selecciona la hora:", key="respuesta_input")
+
+        elif indice == 5:  # Fecha de llegada
+            st.date_input("Selecciona la fecha de llegada:", key="respuesta_input")
+
+        else:  # Cualquier otro input
+            st.text_input("Tu respuesta aquí:", key="respuesta_input")
+
+        # Botón para pasar a la siguiente pregunta
+        st.button("Siguiente", on_click=avanzar_pregunta)
+
+    else:
+        st.write("¡Gracias por responder todas las preguntas!")
 
 # Mostrar las respuestas del usuario al final
 if st.session_state.origen_actual > st.session_state.total_origenes:
@@ -202,21 +205,3 @@ if st.session_state.origen_actual > st.session_state.total_origenes:
         for i, pregunta in enumerate(preguntas_template, start=1):
             respuesta = st.session_state.respuestas.get((origen, i), '')
             st.write(f"{pregunta.format(ordinal=ordinal)}: {respuesta}")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
