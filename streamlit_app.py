@@ -147,8 +147,8 @@ def avanzar_pregunta():
     st.session_state.respuestas[(origen_actual, pregunta_actual)] = respuesta
 
     # Si hemos completado todas las preguntas para el origen actual, pasamos al siguiente origen
-    if pregunta_actual == len(preguntas_template):
-        st.session_state.indice_pregunta = 1  # Volver a la primera pregunta del siguiente origen
+    if pregunta_actual == len(preguntas_template) - 1:  # Cambiado -1 para que coincida con el índice
+        st.session_state.indice_pregunta = 0  # Reiniciar el índice de preguntas
         st.session_state.origen_actual += 1  # Pasar al siguiente origen
     else:
         st.session_state.indice_pregunta += 1  # Pasar a la siguiente pregunta
@@ -173,24 +173,24 @@ if st.session_state.total_origenes is None:
 
     if st.button("Confirmar número de orígenes"):
         st.session_state.total_origenes = st.session_state.origenes_temp
-        st.session_state.indice_pregunta = 1  # Iniciar la secuencia de preguntas
+        st.session_state.indice_pregunta = 0  # Iniciar la secuencia de preguntas
 else:
     # Si todavía hay orígenes que no han sido cubiertos, continuar con las preguntas
     if origen_actual <= st.session_state.total_origenes:
         ordinal = numero_a_ordinal(origen_actual)
-        st.write(preguntas_template[indice - 1].format(ordinal=ordinal))
+        st.write(preguntas_template[indice].format(ordinal=ordinal))
 
         # Condicionales para definir diferentes tipos de input
-        if indice == 2:  # Pregunta de número de personas
+        if indice == 1:  # Pregunta de número de personas
             st.number_input("Tu respuesta aquí:", key="respuesta_input", step=1)
 
-        elif indice == 3:  # Fecha de salida
+        elif indice == 2:  # Fecha de salida
             st.date_input("Selecciona la fecha de salida:", key="respuesta_input")
 
-        elif indice == 4 or indice == 6:  # Hora (momento de salida o llegada)
+        elif indice == 3 or indice == 5:  # Hora (momento de salida o llegada)
             st.time_input("Selecciona la hora:", key="respuesta_input")
 
-        elif indice == 5:  # Fecha de llegada
+        elif indice == 4:  # Fecha de llegada
             st.date_input("Selecciona la fecha de llegada:", key="respuesta_input")
 
         else:  # Cualquier otro input
@@ -203,7 +203,7 @@ else:
         st.write("¡Gracias por responder todas las preguntas!")
 
 # Mostrar las respuestas del usuario al final
-if st.session_state.origen_actual > st.session_state.total_origenes:
+if st.session_state.total_origenes is not None and st.session_state.origen_actual > st.session_state.total_origenes:
     st.write("Tus respuestas fueron:")
     for origen in range(1, st.session_state.total_origenes + 1):
         ordinal = numero_a_ordinal(origen)
