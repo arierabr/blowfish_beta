@@ -123,6 +123,10 @@ if 'total_origenes' not in st.session_state:
 if 'respuestas' not in st.session_state:
     st.session_state.respuestas = {}
 
+# Inicializar la respuesta del usuario
+if 'respuesta_input' not in st.session_state:
+    st.session_state.respuesta_input = ""
+
 
 # Función para convertir número en ordinal en español
 def numero_a_ordinal(n):
@@ -182,19 +186,20 @@ else:
 
         # Condicionales para definir diferentes tipos de input
         if indice == 1:  # Pregunta de número de personas
-            st.number_input("Tu respuesta aquí:", key="respuesta_input", step=1)
+            # Asegurarse de que respuesta_input esté inicializado
+            st.session_state.respuesta_input = st.number_input("Tu respuesta aquí:", key="respuesta_input", step=1)
 
         elif indice == 2:  # Fecha de salida
-            st.date_input("Selecciona la fecha de salida:", key="respuesta_input")
+            st.session_state.respuesta_input = st.date_input("Selecciona la fecha de salida:", key="respuesta_input")
 
         elif indice == 3 or indice == 5:  # Hora (momento de salida o llegada)
-            st.time_input("Selecciona la hora:", key="respuesta_input")
+            st.session_state.respuesta_input = st.time_input("Selecciona la hora:", key="respuesta_input")
 
         elif indice == 4:  # Fecha de llegada
-            st.date_input("Selecciona la fecha de llegada:", key="respuesta_input")
+            st.session_state.respuesta_input = st.date_input("Selecciona la fecha de llegada:", key="respuesta_input")
 
         else:  # Cualquier otro input
-            st.text_input("Tu respuesta aquí:", key="respuesta_input")
+            st.session_state.respuesta_input = st.text_input("Tu respuesta aquí:", key="respuesta_input")
 
         # Botón para pasar a la siguiente pregunta
         st.button("Siguiente", on_click=avanzar_pregunta)
