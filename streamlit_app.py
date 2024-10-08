@@ -99,6 +99,41 @@ st.write(json)
 if st.button("Search options"):
     f.searcher(json)
 
+# Definir las preguntas
+preguntas = [
+    "¿Cuál es tu nombre?",
+    "¿Cuál es tu edad?",
+    "¿De dónde eres?",
+    "¿Cuál es tu comida favorita?"
+]
+
+# Función para gestionar el estado de la pregunta actual
+if 'indice_pregunta' not in st.session_state:
+    st.session_state.indice_pregunta = 0
+
+# Mostrar la pregunta actual
+indice = st.session_state.indice_pregunta
+if indice < len(preguntas):
+    st.write(preguntas[indice])
+
+    # Input para la respuesta del usuario
+    respuesta = st.text_input("Tu respuesta aquí:", key=f"respuesta_{indice}")
+
+    # Botón para pasar a la siguiente pregunta
+    if st.button("Siguiente"):
+        if respuesta:
+            # Guardar la respuesta y pasar a la siguiente pregunta
+            st.session_state[f"respuesta_{indice}"] = respuesta
+            st.session_state.indice_pregunta += 1
+else:
+    st.write("¡Gracias por responder todas las preguntas!")
+
+# Mostrar las respuestas del usuario al final (opcional)
+if st.session_state.indice_pregunta == len(preguntas):
+    st.write("Tus respuestas fueron:")
+    for i in range(len(preguntas)):
+        st.write(f"{preguntas[i]}: {st.session_state.get(f'respuesta_{i}', '')}")
+
 
 
 
