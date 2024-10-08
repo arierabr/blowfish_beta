@@ -161,12 +161,18 @@ def avanzar_pregunta():
 indice = st.session_state.indice_pregunta
 origen_actual = st.session_state.origen_actual
 
+# Variable temporal para el número de orígenes
+if 'origenes_temp' not in st.session_state:
+    st.session_state.origenes_temp = 1  # Valor inicial para el número de orígenes
+
 # Controlar la selección de número de orígenes, con botón para avanzar
 if st.session_state.total_origenes is None:
-    st.session_state.total_origenes = st.number_input("¿Cuántos orígenes diferentes tenemos?", min_value=1, step=1,
-                                                      value=1)
+    st.session_state.origenes_temp = st.number_input(
+        "¿Cuántos orígenes diferentes tenemos?", min_value=1, step=1, value=st.session_state.origenes_temp
+    )
 
     if st.button("Confirmar número de orígenes"):
+        st.session_state.total_origenes = st.session_state.origenes_temp
         st.session_state.indice_pregunta = 1  # Iniciar la secuencia de preguntas
 else:
     # Si todavía hay orígenes que no han sido cubiertos, continuar con las preguntas
