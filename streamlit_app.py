@@ -11,8 +11,8 @@ import time
 import zipfile
 
 # Page title
-st.set_page_config(page_title='CoolSpot', page_icon='🛫')
-st.title('🛫 Welcome to CoolSpot Searcher!')
+st.set_page_config(page_title='CommonGround', page_icon='🛫')
+st.title('🛫 Welcome to CommonGround Searcher!')
 
 #Data ----
 tabla = pd.read_csv("data/tabla_st_01.csv", encoding='utf-8')
