@@ -99,6 +99,8 @@ st.write(json)
 if st.button("Search options"):
     f.searcher(json)
 
+import streamlit as st
+
 # Definir las preguntas
 preguntas = [
     "¿Cuál es tu nombre?",
@@ -107,9 +109,23 @@ preguntas = [
     "¿Cuál es tu comida favorita?"
 ]
 
-# Función para gestionar el estado de la pregunta actual
+# Inicializar el estado de la pregunta actual si no existe
 if 'indice_pregunta' not in st.session_state:
     st.session_state.indice_pregunta = 0
+
+# Inicializar un diccionario para almacenar las respuestas si no existe
+if 'respuestas' not in st.session_state:
+    st.session_state.respuestas = {}
+
+
+# Función para manejar el avance de preguntas
+def avanzar_pregunta():
+    respuesta = st.session_state.respuesta_input
+    if respuesta:  # Asegurar que haya una respuesta
+        st.session_state.respuestas[st.session_state.indice_pregunta] = respuesta
+        st.session_state.indice_pregunta += 1
+        st.session_state.respuesta_input = ""  # Limpiar el campo de entrada
+
 
 # Mostrar la pregunta actual
 indice = st.session_state.indice_pregunta
@@ -117,14 +133,10 @@ if indice < len(preguntas):
     st.write(preguntas[indice])
 
     # Input para la respuesta del usuario
-    respuesta = st.text_input("Tu respuesta aquí:", key=f"respuesta_{indice}")
+    st.text_input("Tu respuesta aquí:", key="respuesta_input")
 
     # Botón para pasar a la siguiente pregunta
-    if st.button("Siguiente"):
-        if respuesta:
-            # Guardar la respuesta y pasar a la siguiente pregunta
-            st.session_state[f"respuesta_{indice}"] = respuesta
-            st.session_state.indice_pregunta += 1
+    st.button("Siguiente", on_click=avanzar_pregunta)
 else:
     st.write("¡Gracias por responder todas las preguntas!")
 
@@ -132,8 +144,7 @@ else:
 if st.session_state.indice_pregunta == len(preguntas):
     st.write("Tus respuestas fueron:")
     for i in range(len(preguntas)):
-        st.write(f"{preguntas[i]}: {st.session_state.get(f'respuesta_{i}', '')}")
-
+        st.write(f"{preguntas[i]}: {st.session_state.respuestas.get(i, '')}")
 
 
 
