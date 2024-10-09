@@ -23,7 +23,7 @@ country_df = tabla.Country.unique()
 # Título de la aplicación
 st.header("Step 1: Choose your starting points")
 
-# Create three columns
+# Create four columns
 col1, col2, col3, col4 = st.columns(4)
 
 # Add content to the first column
@@ -93,7 +93,7 @@ json = {
     "Arrivals_h":Arrivals_h
 }
 
-st.write(json)
+# st.write(json)
 
 import streamlit as st
 
